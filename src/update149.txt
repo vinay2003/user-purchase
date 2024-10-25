@@ -1,0 +1,203 @@
+import React, { useState } from 'react';
+import { ChevronDown, Phone, User } from 'lucide-react';
+
+const NavDropdown = ({ title, items }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="relative group" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
+      <button className="flex items-center space-x-1 text-gray-700 hover:text-gray-900">
+        <span>{title}</span>
+        <ChevronDown size={16} />
+      </button>
+      {isOpen && (
+        <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+          <div className="py-1">
+            {items.map((item, index) => (
+              <a key={index} href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                {item}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const PricingPage = () => {
+  const [activeTab, setActiveTab] = useState('AL CARTE');
+  const [isDealFacilitator, setIsDealFacilitator] = useState(true);
+  const [isMonthly, setIsMonthly] = useState(true);
+
+  const navItems = {
+    HOME: ['Dashboard', 'Analytics', 'Reports'],
+    PROPERTIES: ['For Sale', 'For Rent', 'New Developments'],
+    PROPERTY: ['Residential', 'Commercial', 'Industrial'],
+    REALTOR: ['Find a Realtor', 'Become a Realtor', 'Realtor Resources'],
+    OTHERS: ['About Us', 'Contact', 'FAQ'],
+  };
+
+  const pricingData = {
+    'AL CARTE': [
+      { type: 'Featured listing', name: '1 Unit Listing', price: { with: 1000, without: 800 } },
+      { type: 'Featured listing', name: '1 Building Listing', price: { with: 5000, without: 4000 } },
+      { type: 'Featured listing', name: '1 Estate Listing', price: { with: 10000, without: 8000 } },
+      { type: 'Regular listing', name: '1 Unit Listing', price: { with: 300, without: 240 } },
+      { type: 'Regular listing', name: '1 Building Listing', price: { with: 2000, without: 1600 } },
+      { type: 'Regular listing', name: '1 Estate Listing', price: { with: 3000, without: 2400 } },
+    ],
+    'BUNDLES': [
+      { type: 'Featured listing', name: 'Basic', price: 1000, listings: 2, validity: '01 month' },
+      { type: 'Featured listing', name: 'Elite', price: 1000, listings: 2, validity: '01 month' },
+      { type: 'Featured listing', name: 'Premium', price: 1000, listings: 2, validity: '01 month' },
+      { type: 'Featured listing', name: 'Platinum', price: 1000, listings: 2, validity: '01 month' },
+      { type: 'Featured listing', name: 'Diamond', price: 1000, listings: 2, validity: '01 month' },
+    ]
+  };
+
+  const handlePurchase = (plan) => {
+    window.location.href = 'https://rzp.io/rzp/7Zs6NKg'; // Replace with your actual payment page URL
+  };
+
+  return (
+    <div className="min-h-screen bg-white">
+      <header className="bg-white shadow-sm py-4">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div className="flex items-center space-x-2">
+              <div className="w-10 h-10 bg-gray-200 flex items-center justify-center rounded">
+                <span className="text-xs font-bold">LOGO</span>
+              </div>
+              <span className="text-xl font-bold text-red-800">cre + book</span>
+            </div>
+            <nav className="flex space-x-6">
+              {Object.entries(navItems).map(([key, items]) => (
+                <NavDropdown key={key} title={key} items={items} />
+              ))}
+            </nav>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 text-gray-600">
+                <Phone size={20} />
+                <span>(800) 987 6543</span>
+              </div>
+              <button className="bg-red-800 text-white px-4 py-2 rounded-md font-semibold hover:bg-red-700 transition duration-300">
+                CREATE A LISTING
+              </button>
+              <button className="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition duration-300">
+                <User size={20} className="text-gray-600" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="container mx-auto px-4 py-12 max-w-6xl">
+        <div className="flex justify-center space-x-2 mb-8">
+          <button
+            className={`px-8 py-3 rounded-md font-semibold transition duration-300 ${
+              activeTab === 'AL CARTE' ? 'bg-red-800 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+            onClick={() => setActiveTab('AL CARTE')}
+          >
+            AL CARTE
+          </button>
+          <button
+            className={`px-8 py-3 rounded-md font-semibold transition duration-300 ${
+              activeTab === 'BUNDLES' ? 'bg-red-800 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+            onClick={() => setActiveTab('BUNDLES')}
+          >
+            BUNDLES
+          </button>
+        </div>
+
+        {activeTab === 'AL CARTE' && (
+          <div className="flex justify-center space-x-8 mb-8">
+            <div className="flex items-center space-x-2">
+              <span className={isDealFacilitator ? 'text-gray-900' : 'text-gray-400'}>With Deal Facilitator</span>
+              <button
+                className={`w-14 h-7 rounded-full ${isDealFacilitator ? 'bg-red-800' : 'bg-gray-300'}`}
+                onClick={() => setIsDealFacilitator(!isDealFacilitator)}
+              >
+                <div
+                  className={`w-5 h-5 rounded-full bg-white transform transition-transform duration-200 ease-in-out ${
+                    isDealFacilitator ? 'translate-x-7' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+              <span className={!isDealFacilitator ? 'text-gray-900' : 'text-gray-400'}>Without Deal Facilitator</span>
+            </div>
+          </div>
+        )}
+
+        <div className="flex justify-center space-x-8 mb-10">
+          <div className="flex items-center space-x-2">
+            <span className={isMonthly ? 'text-gray-900' : 'text-gray-400'}>Monthly</span>
+            <button
+              className={`w-14 h-7 rounded-full ${isMonthly ? 'bg-red-800' : 'bg-gray-300'}`}
+              onClick={() => setIsMonthly(!isMonthly)}
+            >
+              <div
+                className={`w-5 h-5 rounded-full bg-white transform transition-transform duration-200 ease-in-out ${
+                  isMonthly ? 'translate-x-7' : 'translate-x-1'
+                }`}
+              />
+            </button>
+            <span className={!isMonthly ? 'text-gray-900' : 'text-gray-400'}>Anually</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {pricingData[activeTab].map((plan, index) => (
+            <div
+              key={index}
+              className={`p-6 rounded-lg shadow-md transition duration-300 hover:shadow-lg ${
+                plan.type === 'Featured listing' ? 'bg-pink-50' : 'bg-white'
+              }`}
+            >
+              <div className="text-xs font-semibold mb-3 px-2 py-1 rounded bg-gray-800 text-white inline-block">
+                {plan.type}
+              </div>
+              <h3 className="text-xl font-semibold mb-4">{plan.name}</h3>
+              <div className="text-4xl font-bold mb-4">
+                $
+                {activeTab === 'AL CARTE'
+                  ? isDealFacilitator
+                    ? plan.price.with
+                    : plan.price.without
+                  : plan.price}
+                <span className="text-base font-normal">/{isMonthly ? 'month' : 'year'}</span>
+              </div>
+              {activeTab === 'BUNDLES' && (
+                <>
+                  <p className="mb-2">Total Listing - {plan.listings}</p>
+                  <p className="mb-4">Validity - {plan.validity}</p>
+                </>
+              )}
+              <button 
+                className="w-full bg-red-800 text-white py-3 rounded-md font-semibold hover:bg-red-700 transition duration-300"
+                onClick={() => handlePurchase(plan)}
+              >
+                Purchase this plan
+              </button>
+            </div>
+          ))}
+        </div>
+      </main>
+
+      <footer className="container mx-auto px-4 py-12 max-w-4xl">
+        <h2 className="text-2xl font-bold mb-6 text-center">Terms and conditions</h2>
+        <ol className="list-decimal list-inside space-y-3 text-gray-700">
+          <li>Only owners can manage a development page (estate, office building, mall, industrial parks) unless a Brokerage or Agent can show exclusive mandate to lease/to sell).</li>
+          <li>Developments that are not paid page will be directed to admin for client auction.</li>
+          <li>Client auction only applies to agents/agencies/brokerage/firms where they will subscribe to it on an annual basis.</li>
+          <li>Promos and coupons to apply upon checkout.</li>
+          <li>Sellers who availed the DEAL FACILITATOR will have contact e-mail and phone set to Crebook's dedicated hotlines</li>
+        </ol>
+      </footer>
+    </div>
+  );
+};
+
+export default PricingPage;
